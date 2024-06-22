@@ -1,6 +1,9 @@
 import { useState, useEffect } from "react";
 import "./app.css";
+import Table from "./Table";
+import UserForm from "./UserForm";
 import Dashboard from "./pages/Dashboard";
+import ProfileMenu from "./ProfileMenu";
 function App() {
   const [query, setQuery] = useState("");
   const [gender, setGender] = useState("all");
