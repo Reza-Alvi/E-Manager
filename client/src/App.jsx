@@ -1,5 +1,11 @@
-import { useState, useEffect } from "react";
-import "./app.css";
+import React from 'react'
+import { useState } from 'react';
+import { BrowserRouter as Router,Routes,Route ,Navigate} from "react-router-dom";
+import   Home from"./pages/Home";
+import RefrshHandler from './RefrsHandler.jsx';
+import Login from './pages/Login';
+import Signup from './pages/Signup';
+import './Ap.css';
 
 function App() {
 
@@ -26,3 +32,5 @@ function App() {
 }
 
 export default App;
+
+
