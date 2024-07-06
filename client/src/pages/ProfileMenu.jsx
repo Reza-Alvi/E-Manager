@@ -7,10 +7,14 @@ const ProfileMenu = () => {
     setIsLoggedIn(true);
   };
 
-  const handleLogout = () => {
-    setIsLoggedIn(false);
-  };
-
+  const handleLogout = (e) => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('loggedInUser');
+    handleSuccess('User Loggedout');
+    setTimeout(() => {
+        navigate('/login');
+    }, 100)
+}
   return (
     <div className="profile-menu">
       <button className="profile-menu-button">Profile</button>
