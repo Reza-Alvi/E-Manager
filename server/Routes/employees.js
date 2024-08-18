@@ -1,7 +1,6 @@
 const express = require('express');
 const multer = require('multer');
 const path = require('path');
-const fs = require('fs');
 const Employee = require('../Models/employee');
 const ensureAuthenticated = require('../Middlewares/Auth');
 const router = express.Router();

@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import EmployeeCard from '../components/EmployeeCard';
-import SearchBar from '../components/SearchDropdown';
 import Navbar from '../components/Navbar';
 
 const Home = () => {
