@@ -54,15 +54,15 @@ function Signup() {
     };
 
     return (
-        <div className='container'>
+        <div className='container mx-auto flex flex-col items-center justify-center min-h-screen'>
             {isLoading ? (
-                <div>Loading...</div>
+                <div className="text-xl font-semibold">Loading...</div>
             ) : (
-                <>
-                    <h1>Sign Up</h1>
-                    <form onSubmit={handleSignup}>
-                        <div>
-                            <label htmlFor='name'>Name</label>
+                <div className='bg-[#d8feff] p-8 rounded-lg w-full max-w-sm shadow-md'>
+                    <h1 className='text-4xl font-bold mb-5'>Sign Up</h1>
+                    <form onSubmit={handleSignup} className='flex flex-col gap-3'>
+                        <div className='flex flex-col'>
+                            <label htmlFor='name' className='text-xl'>Name</label>
                             <input
                                 onChange={handleChange}
                                 type='text'
@@ -70,32 +70,37 @@ function Signup() {
                                 autoFocus
                                 placeholder='Enter your name...'
                                 value={signupInfo.name}
+                                className='w-full text-xl p-2 border-none outline-none border-b border-black placeholder:italic placeholder:text-sm'
                             />
                         </div>
-                        <div>
-                            <label htmlFor='email'>Email</label>
+                        <div className='flex flex-col'>
+                            <label htmlFor='email' className='text-xl'>Email</label>
                             <input
                                 onChange={handleChange}
                                 type='email'
                                 name='email'
                                 placeholder='Enter your email...'
                                 value={signupInfo.email}
+                                className='w-full text-xl p-2 border-none outline-none border-b border-black placeholder:italic placeholder:text-sm'
                             />
                         </div>
-                        <div>
-                            <label htmlFor='password'>Password</label>
+                        <div className='flex flex-col'>
+                            <label htmlFor='password' className='text-xl'>Password</label>
                             <input
                                 onChange={handleChange}
                                 type='password'
                                 name='password'
                                 placeholder='Enter your password...'
                                 value={signupInfo.password}
+                                className='w-full text-xl p-2 border-none outline-none border-b border-black placeholder:italic placeholder:text-sm'
                             />
                         </div>
-                        <button type='submit'>Signup</button>
-                        <span>Already have an account? <Link to="/login">Sign in</Link></span>
+                        <button type='submit' className='bg-red-500 text-white text-lg rounded p-2 cursor-pointer my-1'>
+                            Signup
+                        </button>
+                        <span className='text-center text-gray-600 text-sm mt-4'>Already have an account? <Link to="/login" className='text-blue-500 hover:text-blue-700'>Sign in</Link></span>
                     </form>
-                </>
+                </div>
             )}
         </div>
     );
