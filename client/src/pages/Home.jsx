@@ -1,113 +1,65 @@
-import React from 'react'
-import { useState, useEffect } from "react";
-import "../app.css";
-import Table from "./Table";
-import UserForm from "./UserForm";
-import Dashboard from "./Dashboard";
-import ProfileMenu from "./ProfileMenu";
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+import EmployeeCard from '../components/EmployeeCard';
+import SearchBar from '../components/SearchDropdown';
+import Navbar from '../components/Navbar';
 
-
-function Home() {
-  const [loggedInUser, setLoggedInUser] = useState('');
-
-  useEffect(() => {
-      setLoggedInUser(localStorage.getItem('loggedInUser'))
-  }, [])
-    const [query, setQuery] = useState("");
-  const [gender, setGender] = useState("all");
-  const [age, setAge] = useState("");
-  const [searchField, setSearchField] = useState("name");
-  const [users, setUsers] = useState(() => {
-    const savedUsers = localStorage.getItem("users");
-    return savedUsers ? JSON.parse(savedUsers) : [];
-  });
-  const [isEditing, setIsEditing] = useState(false);
-  const [currentUser, setCurrentUser] = useState(null);
+const Home = () => {
+  const [employees, setEmployees] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
-    localStorage.setItem("users", JSON.stringify(users));
-  }, [users]);
+    const fetchEmployees = async () => {
+      try {
+        const res = await axios.get('https://e-manager-api.vercel.app/api/employees',{
+            headers:{
+              Authorization: `Bearer ${localStorage.getItem('token')}`
+            }
+        });
+        if (res.data && Array.isArray(res.data)) {
+          setEmployees(res.data);
+        } else {
+          setEmployees([]);
+        }
+      } catch (error) {
+        console.error('Error fetching employees:', error);
+        setEmployees([]);
+      }
+    };
 
-  const search = (data) => {
-    return data.filter(item => {
-      const queryMatch =
-        searchField === "name"
-          ? item.first_name.toLowerCase().includes(query)
-          : searchField === "email"
-          ? item.email.toLowerCase().includes(query)
-          : false;
+    fetchEmployees();
+  }, []);
 
-      const genderMatch = gender === "all" || item.gender.toLowerCase() === gender;
-      const ageMatch = age === "" || item.age.toString() === age;
-
-      return queryMatch && genderMatch && ageMatch;
-    });
+  const handleSearch = (searchResults) => {
+    setEmployees(searchResults);
   };
 
-  const handleEdit = (user) => {
-    setIsEditing(true);
-    setCurrentUser(user);
-  };
-
-  const handleRemove = (userId) => {
-    setUsers(users.filter(user => user.id !== userId));
-  };
-
-  const handleSave = (user) => {
-    if (isEditing) {
-      setUsers(users.map(u => (u.id === user.id ? user : u)));
-    } else {
-      setUsers([...users, { ...user, id: users.length + 1 }]);
-    }
-    setIsEditing(false);
-    setCurrentUser(null);
-  };
- 
-  
-
-
-    return(
-    <div className="app">
-    <Dashboard/>
-    <div className="main-content">
-      <div className="header">
-        <h1>Search Page</h1>
-        <ProfileMenu />
+  return (
+    <div className="min-h-screen bg-gray-100">
+      <Navbar onSearch={handleSearch} />
+      <div className="container mx-auto p-4">
+   
+        <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+          {employees.length > 0 ? (
+            employees.map(employee => (
+              <EmployeeCard key={employee._id} employee={employee} />
+            ))
+          ) : (
+            <p className="text-center col-span-full text-gray-600">No employees found.</p>
+          )}
+        </div>
+        <div className="flex justify-center mt-4">
+          <button
+            onClick={() => navigate('/add-employee')}
+            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+          >
+            Add Employee
+          </button>
+        </div>
       </div>
-    <select className="search" onChange={(e) => setGender(e.target.value.toLowerCase())}>
-      <option value="all">All</option>
-      <option value="female">Female</option>
-      <option value="male">Male</option>
-    </select>
-    <input
-      type="text"
-      className="search"
-      placeholder="Age"
-      onChange={(e) => setAge(e.target.value)}
-    />
-    <select className="search" onChange={(e) => setSearchField(e.target.value.toLowerCase())}>
-      <option value="name">Name</option>
-      <option value="email">Email</option>
-    </select>
-    <input
-      type="text"
-      className="search"
-      placeholder={`Search by ${searchField}`}
-      onChange={(e) => setQuery(e.target.value.toLowerCase())}
-    />
-    <Table data={search(users)} onEdit={handleEdit} onRemove={handleRemove} />
-    <UserForm
-      isEditing={isEditing}
-      currentUser={currentUser}
-      onSave={handleSave}
-      onCancel={() => {
-        setIsEditing(false);
-        setCurrentUser(null);
-      }}
-    />
-  </div>
-  </div>
-);
-}
+    </div>
+  );
+};
 
-export default Home
+export default Home;
