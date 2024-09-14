@@ -26,6 +26,8 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use('/auth', AuthRouter);
 app.use('/api/employees', employeeRoutes);
 
+app.post('/auth/refresh-token', AuthRouter);
+
 app.listen(PORT, () => {
   console.log(`Server is running on ${PORT}`);
 });
