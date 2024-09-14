@@ -5,7 +5,6 @@ import * as AiIcons from 'react-icons/ai';
 import { Link, useNavigate } from 'react-router-dom';
 import { SidebarData } from './SidebarData';
 import { IconContext } from 'react-icons';
-
 import SearchDropdown from './SearchDropdown';
 
 function Navbar({ onSearch }) {
@@ -25,6 +24,7 @@ function Navbar({ onSearch }) {
   };
 
   const handleSignOut = () => {
+    localStorage.removeItem('refreshToken');
     localStorage.removeItem('token');
     localStorage.removeItem('loggedInUser');
     navigate('/login');
