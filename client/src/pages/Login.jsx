@@ -35,9 +35,10 @@ function Login() {
                 body: JSON.stringify(loginInfo)
             });
             const result = await response.json();
-            const { success, message, jwtToken, name, error } = result;
+            const { success, message, accessToken, refreshToken, name, error } = result;
             if (success) {
-                localStorage.setItem('token', jwtToken);
+                localStorage.setItem('token', accessToken);
+                localStorage.setItem('refreshToken', refreshToken);
                 localStorage.setItem('loggedInUser', name);
                 setTimeout(() => {
                     navigate('/home');
