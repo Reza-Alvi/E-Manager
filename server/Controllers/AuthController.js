@@ -3,11 +3,11 @@ const jwt = require('jsonwebtoken');
 const UserModel = require('../Models/User');
 
 const generateAccessToken = (user) => {
-    return jwt.sign({ email: user.email, _id: user._id }, process.env.JWT_SECRET, { expiresIn: '10m' });
+    return jwt.sign({ email: user.email, _id: user._id }, process.env.JWT_SECRET, { expiresIn: '15s' });
 };
 
 const generateRefreshToken = (user) => {
-    return jwt.sign({ email: user.email, _id: user._id }, process.env.JWT_REFRESH_SECRET, { expiresIn: '7d' });
+    return jwt.sign({ email: user.email, _id: user._id }, process.env.JWT_REFRESH_SECRET, { expiresIn: '1h' });
 };
 
 const signup = async (req, res) => {
@@ -55,7 +55,7 @@ const refreshAccessToken = async (req, res) => {
     jwt.verify(refreshToken, process.env.JWT_REFRESH_SECRET, (err, user) => {
         if (err) {
             console.error('Refresh token error:', err);
-            return res.sendStatus(403);
+            return res.sendStatus(401);
         }
         const newAccessToken = generateAccessToken({ email: user.email, _id: user._id });
         res.json({ accessToken: newAccessToken });

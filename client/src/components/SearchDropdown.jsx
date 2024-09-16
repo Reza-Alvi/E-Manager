@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+import axiosInstance from '../utils/axiosInstance';
 
 const SearchDropdown = ({ onSearch }) => {
     const [searchBy, setSearchBy] = useState('name');
@@ -18,10 +18,10 @@ const SearchDropdown = ({ onSearch }) => {
             if (category) params.category = category;
             if (salary) params.salary = salary;
 
-            const response = await axios.get('https://e-manager-api.vercel.app/api/employees/search', {
+            const response = await axiosInstance.get('/api/employees/search', {
                 params,
                 headers: {
-                    Authorization: `Bearer ${localStorage.getItem('token')}`,
+                    Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
                 },
             });
             console.log(response.data);

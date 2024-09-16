@@ -1,31 +1,19 @@
-import React, { useState } from "react";
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
-const ProfileMenu = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+const ProfileMenu = ({ handleSignOut }) => {
+  const navigate = useNavigate();
 
-  const handleLogin = () => {
-    setIsLoggedIn(true);
+  const handleSettingsClick = () => {
+    navigate('/profile-settings');
   };
-const handleLogout = (e) => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('loggedInUser');
-    handleSuccess('User Loggedout');
-    setTimeout(() => {
-        navigate('/login');
-    }, 100)
-}
 
   return (
-    <div className="profile-menu">
-      <button className="profile-menu-button">Profile</button>
-      <div className="profile-menu-options">
-        {isLoggedIn ? (
-          <button onClick={handleLogout}>Logout</button>
-        ) : (
-          <button onClick={handleLogin}>Login</button>
-        )}
-      </div>
+    <div className="profile-menu bg-white shadow-lg rounded-md p-4 absolute right-0 mt-2">
+      <button className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" onClick={handleSettingsClick}>Settings</button>
+      <button className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" onClick={handleSignOut}>Sign Out</button>
     </div>
   );
 };
+
 export default ProfileMenu;

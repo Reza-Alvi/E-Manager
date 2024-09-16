@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import axiosInstance from '../utils/axiosInstance';
 import { useNavigate, useParams } from 'react-router-dom';
 
 const EditEmployee = () => {
@@ -13,9 +13,9 @@ const EditEmployee = () => {
   useEffect(() => {
     const fetchEmployee = async () => {
       try {
-        const response = await axios.get(`https://e-manager-api.vercel.app/api/employees/${id}`,{
+        const response = await axiosInstance.get(`/api/employees/${id}`,{
           headers:{
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
+            Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
           }
         });
         setEmployee(response.data);
@@ -47,9 +47,9 @@ const EditEmployee = () => {
     }
 
     try {
-      await axios.put(`https://e-manager-api.vercel.app/api/employees/${id}`, formData, {
+      await axiosInstance.put(`/api/employees/${id}`, formData, {
         headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
+          Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
           'Content-Type': 'multipart/form-data',
         }
       });

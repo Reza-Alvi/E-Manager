@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
-import axios from 'axios';
+import axiosInstance from './utils/axiosInstance';
 
 function RefrshHandler({ setIsAuthenticated }) {
     const location = useLocation();
@@ -9,12 +9,12 @@ function RefrshHandler({ setIsAuthenticated }) {
     useEffect(() => {
         const refreshAuth = async () => {
             try {
-                const storedToken = localStorage.getItem('token');
+                const storedToken = localStorage.getItem('accessToken');
                 const storedRefreshToken = localStorage.getItem('refreshToken');
                 if (storedToken && storedRefreshToken) {
-                    const response = await axios.post('https://e-manager-api.vercel.app/auth/refresh-token', { refreshToken: storedRefreshToken });
+                    const response = await axiosInstance.post('/auth/refresh-token', { refreshToken: storedRefreshToken });
                     if (response.data.accessToken) {
-                        localStorage.setItem('token', response.data.accessToken);
+                        localStorage.setItem('accessToken', response.data.accessToken);
                         setIsAuthenticated(true);
                         if (location.pathname === '/' ||
                             location.pathname === '/login' ||

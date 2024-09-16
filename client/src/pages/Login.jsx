@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import axiosInstance from '../utils/axiosInstance';
 
 function Login() {
     const [loginInfo, setLoginInfo] = useState({
@@ -26,22 +27,14 @@ function Login() {
         }
         setIsLoading(true);
         try {
-            const url = "https://e-manager-api.vercel.app/auth/login";
-            const response = await fetch(url, {
-                method: "POST",
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(loginInfo)
-            });
-            const result = await response.json();
-            const { success, message, accessToken, refreshToken, name, error } = result;
+            const response = await axiosInstance.post('/auth/login', loginInfo);
+            const { success, message, accessToken, refreshToken, name, error } = response.data;
             if (success) {
-                localStorage.setItem('token', accessToken);
+                localStorage.setItem('accessToken', accessToken);
                 localStorage.setItem('refreshToken', refreshToken);
                 localStorage.setItem('loggedInUser', name);
                 setTimeout(() => {
-                    navigate('/home');
+                    navigate('/');
                 }, 1000);
             } else if (error) {
                 const details = error?.details[0].message;
@@ -50,7 +43,8 @@ function Login() {
                 alert(message);
             }
         } catch (err) {
-            alert(err);
+            console.error('Login error:', err);
+            alert('Login failed. Please check your credentials.');
         } finally {
             setIsLoading(false);
         }

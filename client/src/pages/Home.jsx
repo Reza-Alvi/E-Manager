@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import axiosInstance from '../utils/axiosInstance';
 import { useNavigate } from 'react-router-dom';
 import EmployeeCard from '../components/EmployeeCard';
+import SearchBar from '../components/SearchDropdown';
 import Navbar from '../components/Navbar';
 
 const Home = () => {
@@ -11,9 +12,9 @@ const Home = () => {
   useEffect(() => {
     const fetchEmployees = async () => {
       try {
-        const res = await axios.get('https://e-manager-api.vercel.app/api/employees',{
+        const res = await axiosInstance.get('/api/employees',{
             headers:{
-              Authorization: `Bearer ${localStorage.getItem('token')}`
+              Authorization: `Bearer ${localStorage.getItem('accessToken')}`
             }
         });
         if (res.data && Array.isArray(res.data)) {

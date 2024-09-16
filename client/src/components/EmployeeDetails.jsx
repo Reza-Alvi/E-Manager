@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import axios from 'axios';
+import axiosInstance from '../utils/axiosInstance';
 
 const EmployeeDetails = () => {
   const { id } = useParams();
@@ -9,9 +9,9 @@ const EmployeeDetails = () => {
   useEffect(() => {
     const fetchEmployeeDetails = async () => {
       try {
-        const response = await axios.get(`https://e-manager-api.vercel.app/api/employees/${id}`, {
+        const response = await axiosInstance.get(`/api/employees/${id}`, {
           headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
+            Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
           }
         });
         setEmployee(response.data);
