@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import axiosInstance from '../utils/axiosInstance';
 import { FaEllipsisV } from 'react-icons/fa';
 import { useState } from 'react';
 
@@ -9,9 +9,9 @@ const EmployeeCard = ({ employee }) => {
   const [showMenu, setShowMenu] = useState(false);
 
   const handleDelete = async () => {
-    await axios.delete(`https://e-manager-api.vercel.app/api/employees/${employee._id}`, {
+    await axiosInstance.delete(`/api/employees/${employee._id}`, {
       headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
+          Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
       }
     });
     window.location.reload();

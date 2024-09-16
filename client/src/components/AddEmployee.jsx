@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+import axiosInstance from '../utils/axiosInstance';
 import { useNavigate } from 'react-router-dom';
 
 const AddEmployee = () => {
@@ -37,9 +37,9 @@ const AddEmployee = () => {
     }
   
     try {
-      await axios.post('https://e-manager-api.vercel.app/api/employees', formData, {
+      await axiosInstance.post('/api/employees', formData, {
         headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
+          Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
           'Content-Type': 'multipart/form-data',
         }
       });

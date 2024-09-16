@@ -26,7 +26,7 @@ function Signup() {
         }
         setIsLoading(true);
         try {
-            const url = "https://e-manager-api.vercel.app/auth/signup";
+            const url = "http://localhost:8080/auth/signup";
             const response = await fetch(url, {
                 method: "POST",
                 headers: {

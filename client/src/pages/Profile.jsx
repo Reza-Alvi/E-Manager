@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import axiosInstance from '../utils/axiosInstance';
 
 const Profile = () => {
     const [user, setUser] = useState({ name: '', email: '', password: '' });
@@ -7,8 +7,8 @@ const Profile = () => {
     useEffect(() => {
         const fetchUserData = async () => {
             try {
-                const response = await axios.get('/auth/profile', {
-                    headers: { Authorization: localStorage.getItem('jwtToken') }
+                const response = await axiosInstance.get('/auth/profile', {
+                    headers: { Authorization: localStorage.getItem('accessToken') }
                 });
                 setUser(response.data);
             } catch (error) {
@@ -24,8 +24,8 @@ const Profile = () => {
 
     const handleSave = async () => {
         try {
-            await axios.put('/auth/profile', user, {
-                headers: { Authorization: localStorage.getItem('jwtToken') }
+            await axiosInstance.put('/auth/profile', user, {
+                headers: { Authorization: localStorage.getItem('accessToken') }
             });
             alert('Profile updated successfully');
         } catch (error) {
