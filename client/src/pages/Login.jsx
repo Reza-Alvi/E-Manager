@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import axiosInstance from '../utils/axiosInstance';
 
 function Login() {
     const [loginInfo, setLoginInfo] = useState({
@@ -27,7 +27,7 @@ function Login() {
         }
         setIsLoading(true);
         try {
-            const response = await axios.post("https://e-manager-api.vercel.app/auth/login", loginInfo);
+            const response = await axiosInstance.post('/auth/login', loginInfo);
             const { success, message, accessToken, refreshToken, name, error } = response.data;
             if (success) {
                 localStorage.setItem('accessToken', accessToken);
