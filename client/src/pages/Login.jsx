@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axiosInstance from '../utils/axiosInstance';
 
@@ -9,14 +9,13 @@ function Login() {
     });
     const [isLoading, setIsLoading] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
+    const [showWelcomePopup, setShowWelcomePopup] = useState(false);
 
     const navigate = useNavigate();
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-        const copyLoginInfo = { ...loginInfo };
-        copyLoginInfo[name] = value;
-        setLoginInfo(copyLoginInfo);
+        setLoginInfo(prev => ({ ...prev, [name]: value }));
     };
 
     const handleLogin = async (e) => {
@@ -33,13 +32,17 @@ function Login() {
             if (success) {
                 localStorage.setItem('accessToken', accessToken);
                 localStorage.setItem('refreshToken', refreshToken);
+                localStorage.setItem('loggedInUser', name);
+                
+                // Show popup and navigate after a brief delay
+                setShowWelcomePopup(true);
                 setTimeout(() => {
-                    navigate('/');
-                }, 1000);
+                    navigate('/'); // Navigate after showing popup
+                }, 3000); // Adjust delay as needed
             } else if (error) {
                 const details = error?.details[0].message;
                 alert(details);
-            } else if (!success) {
+            } else {
                 alert(message);
             }
         } catch (err) {
@@ -53,6 +56,25 @@ function Login() {
     const togglePasswordVisibility = () => {
         setShowPassword(!showPassword);
     };
+
+    const closePopup = () => {
+        setShowWelcomePopup(false);
+    };
+
+    // Check if fields are autofilled
+    useEffect(() => {
+        const checkAutofill = () => {
+            if (loginInfo.email && loginInfo.password) {
+                setShowWelcomePopup(true);
+                setTimeout(() => {
+                    navigate('/');
+                }, 3000);
+            }
+        };
+        
+        const timeoutId = setTimeout(checkAutofill, 1000); // Adjust time as necessary
+        return () => clearTimeout(timeoutId);
+    }, [loginInfo, navigate]);
 
     return (
         <div className='container mx-auto flex flex-col items-center justify-center min-h-screen'>
@@ -71,6 +93,7 @@ function Login() {
                                 placeholder='Enter E-mail Address*'
                                 value={loginInfo.email}
                                 className='w-full text-xl p-2 border-none outline-none border-b border-black placeholder:italic placeholder:text-sm'
+                                autoComplete="email" // Allow autofill for email
                             />
                         </div>
                         <div className='flex flex-col relative'>
@@ -82,6 +105,7 @@ function Login() {
                                 placeholder='Enter your password...'
                                 value={loginInfo.password}
                                 className='w-full text-xl p-2 border-none outline-none border-b border-black placeholder:italic placeholder:text-sm'
+                                autoComplete="current-password" // Allow autofill for password
                             />
                             <button
                                 type="button"
@@ -99,6 +123,19 @@ function Login() {
                         </button>
                         <span className='text-center text-gray-600 text-sm mt-4'>Create an account? <Link to="/signup" className='text-blue-500 hover:text-blue-700'>Signup</Link></span>
                     </form>
+                </div>
+            )}
+            {showWelcomePopup && (
+                <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+                    <div className="bg-white p-6 rounded-lg shadow-md text-center">
+                        <h2 className="text-2xl font-bold">Welcome to E-Manager!</h2>
+                        <p className="mt-2">It's a web-based management app designed to help you streamline your tasks and manage your projects effectively.</p>
+                        <p className="mt-2">Stay organized and enhance your productivity with our intuitive tools.</p>
+                        <p className="mt-4">We are thrilled to have you on board!</p>
+                        <button onClick={closePopup} className="mt-4 bg-blue-500 text-white p-2 rounded hover:bg-blue-600">
+                            Close
+                        </button>
+                    </div>
                 </div>
             )}
         </div>
