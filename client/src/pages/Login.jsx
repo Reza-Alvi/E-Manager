@@ -8,6 +8,7 @@ function Login() {
         password: ''
     });
     const [isLoading, setIsLoading] = useState(false);
+    const [showPassword, setShowPassword] = useState(false);
 
     const navigate = useNavigate();
 
@@ -50,6 +51,10 @@ function Login() {
         }
     };
 
+    const togglePasswordVisibility = () => {
+        setShowPassword(!showPassword);
+    };
+
     return (
         <div className='container mx-auto flex flex-col items-center justify-center min-h-screen'>
             {isLoading ? (
@@ -69,17 +74,27 @@ function Login() {
                                 className='w-full text-xl p-2 border-none outline-none border-b border-black placeholder:italic placeholder:text-sm'
                             />
                         </div>
-                        <div className='flex flex-col'>
+                        <div className='flex flex-col relative'>
                             <label htmlFor='password' className='text-xl'>Password</label>
                             <input
                                 onChange={handleChange}
-                                type='password'
+                                type={showPassword ? 'text' : 'password'}
                                 name='password'
                                 placeholder='Enter your password...'
                                 value={loginInfo.password}
                                 className='w-full text-xl p-2 border-none outline-none border-b border-black placeholder:italic placeholder:text-sm'
                             />
+                            <button
+                                type="button"
+                                onClick={togglePasswordVisibility}
+                                className="absolute right-0 top-9 text-sm px-2 py-1 text-blue-500"
+                            >
+                                {showPassword ? 'Hide' : 'Show'}
+                            </button>
                         </div>
+                        <Link to="/forgot-password" className="text-right text-blue-500 hover:text-blue-700 text-sm mt-1">
+                            Forgot Password?
+                        </Link>
                         <button type='submit' className='bg-red-500 text-white text-lg rounded p-2 cursor-pointer my-1'>
                             Login
                         </button>
