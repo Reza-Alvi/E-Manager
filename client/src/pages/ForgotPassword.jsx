@@ -4,6 +4,7 @@ import axios from 'axios';
 const ForgotPassword = () => {
     const [email, setEmail] = useState('');
     const [message, setMessage] = useState('');
+    const [showModal, setShowModal] = useState(false);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -13,7 +14,14 @@ const ForgotPassword = () => {
         } catch (error) {
             const errorMessage = error.response?.data?.message || 'An unexpected error occurred';
             setMessage(errorMessage);
+        } finally {
+            setShowModal(true);
         }
+    };
+
+    const closeModal = () => {
+        setShowModal(false);
+        setMessage('');  
     };
 
     return (
@@ -36,7 +44,23 @@ const ForgotPassword = () => {
                         Send Reset Link
                     </button>
                 </form>
-                {message && <p className='text-center text-gray-700 mt-3'>{message}</p>}
+                {showModal && (
+                    <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+                        <div className="bg-white rounded-lg p-6 max-w-sm w-full relative">
+                            <button onClick={closeModal} className="absolute top-2 right-2 text-xl">&times;</button>
+                            <h3 className="text-2xl font-semibold mb-4">Message</h3>
+                            <p className="text-lg">{message}</p>
+                            <div className="mt-4 flex justify-end">
+                                <button
+                                    onClick={closeModal}
+                                    className="bg-blue-500 text-white px-4 py-2 rounded-md"
+                                >
+                                    Close
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                )}
             </div>
         </div>
     );
