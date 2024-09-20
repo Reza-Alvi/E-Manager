@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axiosInstance from '../utils/axiosInstance';
 
@@ -30,12 +30,12 @@ function Login() {
         setIsLoading(true);
         try {
             const response = await axiosInstance.post('/auth/login', loginInfo);
-            const { success, message, accessToken, refreshToken, name, error } = response.data;
+            const { success, message, accessToken, refreshToken, error } = response.data;
             if (success) {
                 localStorage.setItem('accessToken', accessToken);
                 localStorage.setItem('refreshToken', refreshToken);
                 
-                // Show popup and navigate after a brief delay
+                // Show popup on successful login
                 setShowWelcomePopup(true);
                 setTimeout(() => {
                     navigate('/'); // Navigate after showing popup
@@ -61,21 +61,6 @@ function Login() {
     const closePopup = () => {
         setShowWelcomePopup(false);
     };
-
-    // Check if fields are autofilled
-    useEffect(() => {
-        const checkAutofill = () => {
-            if (loginInfo.email && loginInfo.password) {
-                setShowWelcomePopup(true);
-                setTimeout(() => {
-                    navigate('/');
-                }, 3000);
-            }
-        };
-        
-        const timeoutId = setTimeout(checkAutofill, 1000); // Adjust time as necessary
-        return () => clearTimeout(timeoutId);
-    }, [loginInfo, navigate]);
 
     return (
         <div className='container mx-auto flex flex-col items-center justify-center min-h-screen'>
