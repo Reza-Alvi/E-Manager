@@ -27,7 +27,6 @@ const signup = async (req, res) => {
     }
 };
 
-
 const login = async (req, res) => {
     try {
         const { email, password } = req.body;
@@ -66,22 +65,39 @@ const refreshAccessToken = async (req, res) => {
 const getProfile = async (req, res) => {
     try {
         const user = await UserModel.findById(req.user._id);
+        if (!user) {
+            return res.status(404).json({ message: 'User not found', success: false });
+        }
         res.status(200).json(user);
     } catch (err) {
+        console.error('Get profile error:', err);
         res.status(500).json({ message: 'Internal server error', success: false });
     }
 };
 
 const updateProfile = async (req, res) => {
     try {
-        const { name, email, password } = req.body;
-        const updateUser = { name, email };
+        const { firstName, lastName, dateOfBirth, gender, phoneNumber, email, password } = req.body;
+        const updateUser = { firstName, lastName, dateOfBirth, gender, phoneNumber, email };
+        
         if (password) {
             updateUser.password = await bcrypt.hash(password, 10);
         }
+
+        
+        if (req.file) {
+            
+            const profilePicture = `data:${req.file.mimetype};base64,${req.file.buffer.toString('base64')}`;
+            updateUser.profilePicture = profilePicture;
+        }
+
         const user = await UserModel.findByIdAndUpdate(req.user._id, updateUser, { new: true });
+        if (!user) {
+            return res.status(404).json({ message: 'User not found', success: false });
+        }
         res.status(200).json({ message: 'Profile updated successfully', user });
     } catch (err) {
+        console.error('Update profile error:', err);
         res.status(500).json({ message: 'Internal server error', success: false });
     }
 };

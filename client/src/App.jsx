@@ -9,6 +9,7 @@ import RefrshHandler from './RefrsHandler.jsx';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
 import Profile from './pages/Profile';
+import ProfileDetails from './pages/ProfileDetails.jsx';
 import './Ap.css';
 
 function App() {
@@ -33,6 +34,7 @@ function App() {
     <Route path="/edit-employee/:id" element={<EditEmployee />} />
     <Route path="/employee-details/:id" element={<EmployeeDetails />} /> 
     <Route path="/profile" element={<Profile />} />
+    <Route path="/profile-details" element={<ProfileDetails />} />
   </Routes>
 
 </div>
