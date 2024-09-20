@@ -14,9 +14,11 @@ const Profile = () => {
 
     const [message, setMessage] = useState('');
     const [showPassword, setShowPassword] = useState(false);
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
         const fetchUserData = async () => {
+            setLoading(true);
             try {
                 const response = await axiosInstance.get('/auth/profile', {
                     headers: { Authorization: localStorage.getItem('accessToken') }
@@ -32,6 +34,8 @@ const Profile = () => {
                 });
             } catch (error) {
                 console.error('Error fetching user data:', error);
+            } finally {
+                setLoading(false);
             }
         };
         fetchUserData();
@@ -47,6 +51,7 @@ const Profile = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setLoading(true);
         try {
             const response = await axiosInstance.put('/auth/profile', user, {
                 headers: { Authorization: `Bearer ${localStorage.getItem('accessToken')}` },
@@ -55,14 +60,21 @@ const Profile = () => {
         } catch (error) {
             console.error('Error updating profile:', error);
             setMessage('Failed to update profile');
+        } finally {
+            setLoading(false);
         }
     };
 
     return (
-        <div className="max-w-2xl mx-auto mt-10 p-6 bg-white rounded-lg shadow-md">
+        <div className="relative max-w-2xl mx-auto mt-10 p-6 bg-white rounded-lg shadow-md">
+            {loading && (
+                <div className="absolute inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center z-50">
+                    <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-blue-500"></div>
+                </div>
+            )}
             <h2 className="text-2xl font-semibold text-gray-800 mb-4">Edit Profile</h2>
             {message && <p className="mb-4 text-green-600">{message}</p>}
-            <form onSubmit={handleSubmit} className="space-y-4">
+            <form onSubmit={handleSubmit} className={`space-y-4 ${loading ? 'filter blur-sm' : ''}`}>
                 <div>
                     <label className="block text-gray-700">First Name</label>
                     <input
@@ -72,6 +84,7 @@ const Profile = () => {
                         onChange={handleChange}
                         required
                         className="mt-1 p-2 w-full border rounded-md focus:ring-blue-500 focus:border-blue-500"
+                        disabled={loading}
                     />
                 </div>
                 <div>
@@ -83,6 +96,7 @@ const Profile = () => {
                         onChange={handleChange}
                         required
                         className="mt-1 p-2 w-full border rounded-md focus:ring-blue-500 focus:border-blue-500"
+                        disabled={loading}
                     />
                 </div>
                 <div>
@@ -94,6 +108,7 @@ const Profile = () => {
                         onChange={handleChange}
                         required
                         className="mt-1 p-2 w-full border rounded-md focus:ring-blue-500 focus:border-blue-500"
+                        disabled={loading}
                     />
                 </div>
                 <div>
@@ -104,6 +119,7 @@ const Profile = () => {
                         onChange={handleChange}
                         required
                         className="mt-1 p-2 w-full border rounded-md focus:ring-blue-500 focus:border-blue-500"
+                        disabled={loading}
                     >
                         <option value="">Select Gender</option>
                         <option value="male">Male</option>
@@ -119,6 +135,7 @@ const Profile = () => {
                         onChange={handleChange}
                         required
                         className="mt-1 p-2 w-full border rounded-md focus:ring-blue-500 focus:border-blue-500"
+                        disabled={loading}
                     />
                 </div>
                 <div>
@@ -130,6 +147,7 @@ const Profile = () => {
                         onChange={handleChange}
                         required
                         className="mt-1 p-2 w-full border rounded-md focus:ring-blue-500 focus:border-blue-500"
+                        disabled={loading}
                     />
                 </div>
                 <div>
@@ -142,6 +160,7 @@ const Profile = () => {
                             onChange={handleChange}
                             placeholder="Leave blank to keep the same password"
                             className="mt-1 p-2 w-full border rounded-md focus:ring-blue-500 focus:border-blue-500"
+                            disabled={loading}
                         />
                         <span
                             onClick={() => setShowPassword(!showPassword)}
@@ -154,8 +173,9 @@ const Profile = () => {
                 <button
                     type="submit"
                     className="w-full bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600"
+                    disabled={loading}
                 >
-                    Save Changes
+                    {loading ? 'Saving...' : 'Save Changes'}
                 </button>
             </form>
         </div>

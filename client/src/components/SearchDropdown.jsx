@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axiosInstance from '../utils/axiosInstance';
+import { FaSpinner } from 'react-icons/fa';
 
 const SearchDropdown = ({ onSearch }) => {
     const [searchBy, setSearchBy] = useState('name');
@@ -8,8 +9,10 @@ const SearchDropdown = ({ onSearch }) => {
     const [age, setAge] = useState('');
     const [category, setCategory] = useState('');
     const [salary, setSalary] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
 
     const handleSearch = async () => {
+        setIsLoading(true);
         try {
             const params = {};
             if (searchTerm) params[searchBy] = searchTerm;
@@ -28,6 +31,8 @@ const SearchDropdown = ({ onSearch }) => {
             onSearch(response.data);
         } catch (error) {
             console.error('Error fetching search results:', error);
+        } finally {
+            setIsLoading(false);
         }
     };
 
@@ -71,7 +76,7 @@ const SearchDropdown = ({ onSearch }) => {
                 className="mt-2 w-full p-1 border rounded"
             />
             <button onClick={handleSearch} className="mt-2 w-full p-1 bg-blue-500 text-white rounded">
-                Search
+                {isLoading ? <FaSpinner className="animate-spin" /> : 'Search'}
             </button>
         </div>
     );

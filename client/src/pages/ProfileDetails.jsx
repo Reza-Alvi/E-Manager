@@ -18,11 +18,13 @@ const ProfileDetails = () => {
     const [message, setMessage] = useState('');
     const [isUploading, setIsUploading] = useState(false);
     const [showModal, setShowModal] = useState(false);
+    const [loading, setLoading] = useState(false);
 
     const navigate = useNavigate();
 
     useEffect(() => {
         const fetchUserData = async () => {
+            setLoading(true);
             try {
                 const response = await axiosInstance.get('/auth/profile', {
                     headers: { Authorization: `Bearer ${localStorage.getItem('accessToken')}` }
@@ -42,6 +44,8 @@ const ProfileDetails = () => {
                 if (error.response && error.response.status === 401) {
                     navigate('/login');
                 }
+            } finally {
+                setLoading(false);
             }
         };
         fetchUserData();
@@ -93,7 +97,12 @@ const ProfileDetails = () => {
     };
 
     return (
-        <div className="max-w-3xl mx-auto mt-10 p-8 bg-white rounded-lg shadow-md">
+        <div className="relative max-w-3xl mx-auto mt-10 p-8 bg-white rounded-lg shadow-md">
+            {loading && (
+                <div className="absolute inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center z-50">
+                    <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-blue-500"></div>
+                </div>
+            )}
             <h2 className="text-3xl font-bold text-gray-900 mb-6">Profile Details</h2>
             {message && <p className="mb-4 text-green-600">{message}</p>}
             <div className="space-y-6">
@@ -103,7 +112,7 @@ const ProfileDetails = () => {
                             <img
                                 src={user.profilePicture}
                                 alt="Profile"
-                                className="w-32 h-32 rounded-full object-cover border-4 border-gray-300 shadow-lg"
+                                className="w-40 h-40 rounded-full object-cover border-4 border-gray-300 shadow-lg"
                             />
                         ) : (
                             <div className="w-32 h-32 rounded-full bg-gray-200 flex items-center justify-center border-4 border-gray-300 shadow-lg">

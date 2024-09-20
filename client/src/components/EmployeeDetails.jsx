@@ -5,9 +5,11 @@ import axiosInstance from '../utils/axiosInstance';
 const EmployeeDetails = () => {
   const { id } = useParams();
   const [employee, setEmployee] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchEmployeeDetails = async () => {
+      setLoading(true);
       try {
         const response = await axiosInstance.get(`/api/employees/${id}`, {
           headers: {
@@ -17,14 +19,26 @@ const EmployeeDetails = () => {
         setEmployee(response.data);
       } catch (error) {
         console.error('Error fetching employee details:', error);
+      } finally {
+        setLoading(false);
       }
     };
 
     fetchEmployeeDetails();
   }, [id]);
 
+  if (loading) {
+    return (
+      <div className="relative min-h-screen bg-gray-100">
+        <div className="absolute inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center z-50">
+          <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-blue-500"></div>
+        </div>
+      </div>
+    );
+  }
+
   if (!employee) {
-    return <div className="text-center mt-10">Loading...</div>;
+    return <div className="text-center mt-10">No employee details found.</div>;
   }
 
   return (
@@ -34,7 +48,7 @@ const EmployeeDetails = () => {
           <img
             src={employee.photo}
             alt={employee.name}
-            className="w-100 h-50  mb-4"
+            className="w-100 h-50 mb-4"
           />
           <h1 className="text-4xl font-bold mb-4">{employee.name}</h1>
         </div>

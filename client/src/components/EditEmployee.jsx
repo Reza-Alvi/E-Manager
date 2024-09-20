@@ -8,11 +8,14 @@ const EditEmployee = () => {
     name: '', age: '', gender: '', nationality: '',
     address: '', contacts: '', category: '', salary: '', photo: ''
   });
+
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchEmployee = async () => {
       try {
+        setLoading(true);
         const response = await axiosInstance.get(`/api/employees/${id}`,{
           headers:{
             Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
@@ -21,6 +24,8 @@ const EditEmployee = () => {
         setEmployee(response.data);
       } catch (error) {
         console.error('Error fetching employee details:', error);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -47,6 +52,7 @@ const EditEmployee = () => {
     }
 
     try {
+      setLoading(true);
       await axiosInstance.put(`/api/employees/${id}`, formData, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
@@ -56,17 +62,28 @@ const EditEmployee = () => {
       navigate('/');
     } catch (error) {
       console.error('Error updating employee data:', error);
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <form onSubmit={handleSubmit} className="flex justify-center items-center h-screen">
-      <div className="bg-white p-4 rounded-lg shadow-md w-80">
+    <div className="relative flex justify-center items-center h-screen">
+      {loading && (
+        <div className="absolute inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center z-50">
+          <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-blue-500"></div>
+        </div>
+      )}
+      <form
+        onSubmit={handleSubmit}
+        className={`bg-white p-4 rounded-lg shadow-md w-80 ${loading ? 'filter blur-sm' : ''}`}
+      >
         <input
           type="file"
           name="photo"
           onChange={handleChange}
           className="w-full px-4 py-2 mb-4 border border-gray-300 rounded focus:outline-none"
+          disabled={loading}
         />
         <input
           type="text"
@@ -75,6 +92,7 @@ const EditEmployee = () => {
           value={employee.name}
           onChange={handleChange}
           className="w-full px-4 py-2 mb-4 border border-gray-300 rounded focus:outline-none"
+          disabled={loading}
         />
         <input
           type="number"
@@ -83,6 +101,7 @@ const EditEmployee = () => {
           value={employee.age}
           onChange={handleChange}
           className="w-full px-4 py-2 mb-4 border border-gray-300 rounded focus:outline-none"
+          disabled={loading}
         />
         <input
           type="text"
@@ -91,6 +110,7 @@ const EditEmployee = () => {
           value={employee.gender}
           onChange={handleChange}
           className="w-full px-4 py-2 mb-4 border border-gray-300 rounded focus:outline-none"
+          disabled={loading}
         />
         <input
           type="text"
@@ -99,6 +119,7 @@ const EditEmployee = () => {
           value={employee.nationality}
           onChange={handleChange}
           className="w-full px-4 py-2 mb-4 border border-gray-300 rounded focus:outline-none"
+          disabled={loading}
         />
         <input
           type="text"
@@ -107,6 +128,7 @@ const EditEmployee = () => {
           value={employee.address}
           onChange={handleChange}
           className="w-full px-4 py-2 mb-4 border border-gray-300 rounded focus:outline-none"
+          disabled={loading}
         />
         <input
           type="email"
@@ -115,6 +137,7 @@ const EditEmployee = () => {
           value={employee.contacts}
           onChange={handleChange}
           className="w-full px-4 py-2 mb-4 border border-gray-300 rounded focus:outline-none"
+          disabled={loading}
         />
         <input
           type="text"
@@ -123,6 +146,7 @@ const EditEmployee = () => {
           value={employee.category}
           onChange={handleChange}
           className="w-full px-4 py-2 mb-4 border border-gray-300 rounded focus:outline-none"
+          disabled={loading}
         />
         <input
           type="number"
@@ -131,15 +155,17 @@ const EditEmployee = () => {
           value={employee.salary}
           onChange={handleChange}
           className="w-full px-4 py-2 mb-4 border border-gray-300 rounded focus:outline-none"
+          disabled={loading}
         />
         <button
           type="submit"
           className="w-full bg-blue-500 text-white rounded py-2 px-4 text-sm hover:bg-blue-600"
+          disabled={loading}
         >
-          Save Changes
+          {loading ? 'Saving...' : 'Save Changes'}
         </button>
-      </div>
-    </form>
+      </form>
+    </div>
   );
 };
 

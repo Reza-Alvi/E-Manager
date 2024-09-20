@@ -19,15 +19,7 @@ const storage = multer.diskStorage({
 const upload = multer({ storage });
 
 app.use(bodyParser.json());
-
-const corsOptions = {
-  origin: 'https://e-manager-ui.vercel.app',
-  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-  credentials: true,
-  optionsSuccessStatus: 204
-};
-
-app.use(cors(corsOptions));
+app.use(cors());
 
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 

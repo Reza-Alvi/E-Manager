@@ -27,7 +27,6 @@ function Navbar({ onSearch }) {
   const handleSignOut = () => {
     localStorage.removeItem('accessToken');
     localStorage.removeItem('refreshToken');
-    localStorage.removeItem('loggedInUser');
     navigate('/login');
   };
 

@@ -6,7 +6,7 @@ const nodemailer = require('nodemailer');
 require('dotenv').config();
 
 const generateAccessToken = (user) => {
-    return jwt.sign({ email: user.email, _id: user._id }, process.env.JWT_SECRET, { expiresIn: '15s' });
+    return jwt.sign({ email: user.email, _id: user._id }, process.env.JWT_SECRET, { expiresIn: '15m' });
 };
 
 const generateRefreshToken = (user) => {
@@ -127,7 +127,7 @@ const forgotPassword = async (req, res) => {
 
         
         const resetPasswordToken = generateResetToken();
-        const resetPasswordExpires = Date.now() + 3600000; 
+        const resetPasswordExpires = Date.now() + 3600000;
 
         
         user.resetPasswordToken = resetPasswordToken;

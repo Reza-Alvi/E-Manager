@@ -7,10 +7,12 @@ import Navbar from '../components/Navbar';
 
 const Home = () => {
   const [employees, setEmployees] = useState([]);
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchEmployees = async () => {
+      setLoading(true);
       try {
         const res = await axiosInstance.get('/api/employees',{
             headers:{
@@ -25,6 +27,8 @@ const Home = () => {
       } catch (error) {
         console.error('Error fetching employees:', error);
         setEmployees([]);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -36,17 +40,21 @@ const Home = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100">
+    <div className="relative min-h-screen bg-gray-100">
+      {loading && (
+        <div className="absolute inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center z-50">
+          <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-blue-500"></div>
+        </div>
+      )}
       <Navbar onSearch={handleSearch} />
       <div className="container mx-auto p-4">
-   
-        <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+        <div className="flex flex-wrap gap-4">
           {employees.length > 0 ? (
-            employees.map(employee => (
+            employees.map((employee) => (
               <EmployeeCard key={employee._id} employee={employee} />
             ))
           ) : (
-            <p className="text-center col-span-full text-gray-600">No employees found.</p>
+            <p className="text-center w-full text-gray-600">No employees found.</p>
           )}
         </div>
         <div className="flex justify-center mt-4">

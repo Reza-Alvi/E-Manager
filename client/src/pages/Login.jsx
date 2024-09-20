@@ -33,7 +33,6 @@ function Login() {
             if (success) {
                 localStorage.setItem('accessToken', accessToken);
                 localStorage.setItem('refreshToken', refreshToken);
-                localStorage.setItem('loggedInUser', name);
                 setTimeout(() => {
                     navigate('/');
                 }, 1000);
