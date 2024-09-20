@@ -138,13 +138,6 @@ const Graph = () => {
             <p className="text-center">Bar Chart</p>
           </div>
         </div>
-        <div className="text-center mt-4">
-          <h2 className="text-xl font-bold">Salary Summary</h2>
-          <p>Total Salary: ${totalSalary}</p>
-          <p>Number of Persons: {numberOfPersons}</p>
-          <p>Highest Salary: ${highestSalary}</p>
-          <p>Lowest Salary: ${lowestSalary}</p>
-        </div>
       </div>
     </div>
   );
