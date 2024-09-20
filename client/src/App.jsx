@@ -10,6 +10,8 @@ import Login from './pages/Login';
 import Signup from './pages/Signup';
 import Profile from './pages/Profile';
 import ProfileDetails from './pages/ProfileDetails.jsx';
+import ForgotPassword from './pages/ForgotPassword.jsx';
+import ResetPassword from './pages/ResetPassword.jsx';
 import './Ap.css';
 
 function App() {
@@ -28,6 +30,8 @@ function App() {
   <Routes>
     <Route path='/' element={<Navigate to="/login" />} />
     <Route path='/login' element={<Login />} />
+    <Route path="/forgot-password" element={<ForgotPassword />} />
+    <Route path="/reset-password/:token" element={<ResetPassword />} />
     <Route path='/signup' element={<Signup />} />
     <Route path='/home' element={<PrivateRoute element={<Home />} />} />
     <Route path="/add-employee" element={<AddEmployee />} />
