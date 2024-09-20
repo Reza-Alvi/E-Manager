@@ -9,28 +9,40 @@ import RefrshHandler from './RefrsHandler.jsx';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
 import Profile from './pages/Profile';
+import ProfileDetails from './pages/ProfileDetails.jsx';
+import ForgotPassword from './pages/ForgotPassword.jsx';
+import ResetPassword from './pages/ResetPassword.jsx';
 import Graph from './pages/Graph';
 import './Ap.css';
+
 function App() {
- const [isAuthenticated, setIsAuthenticated] = useState(false);
-   const PrivateRoute = ({ element }) => {
-    return isAuthenticated ? element : <Navigate to="/login" />
-  }
-return(
-  <div  className='App'>
-  <RefrshHandler setIsAuthenticated={setIsAuthenticated} />
-  <Routes>
-    <Route path='/' element={<Navigate to="/login" />} />
-    <Route path='/login' element={<Login />} />
-    <Route path='/signup' element={<Signup />} />
-    <Route path='/home' element={<PrivateRoute element={<Home />} />} />
-    <Route path="/add-employee" element={<AddEmployee />} />
-    <Route path="/edit-employee/:id" element={<EditEmployee />} />
-    <Route path="/employee-details/:id" element={<EmployeeDetails />} /> 
-    <Route path="/profile" element={<Profile />} />
-    <Route path="/graph" element={<Graph />} />
-  </Routes>
-</div>
-  )
-}
-export default App;
+
+    const [isAuthenticated, setIsAuthenticated] = useState(false);
+   
+    const PrivateRoute = ({ element }) => {
+      return isAuthenticated ? element : <Navigate to="/login" />
+    }
+    return(
+      <div  className='App'>
+      <RefrshHandler setIsAuthenticated={setIsAuthenticated} />
+     
+      <Routes>
+        <Route path='/' element={<Navigate to="/login" />} />
+        <Route path='/login' element={<Login />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/reset-password/:token" element={<ResetPassword />} />
+        <Route path='/signup' element={<Signup />} />
+        <Route path='/home' element={<PrivateRoute element={<Home />} />} />
+        <Route path="/add-employee" element={<AddEmployee />} />
+        <Route path="/edit-employee/:id" element={<EditEmployee />} />
+        <Route path="/employee-details/:id" element={<EmployeeDetails />} /> 
+        <Route path="/profile" element={<Profile />} />
+        <Route path="/profile-details" element={<ProfileDetails />} />
+        <Route path="/graph" element={<Graph />} />
+      </Routes>
+    
+    </div>
+      )
+    }
+    
+    export default App;
