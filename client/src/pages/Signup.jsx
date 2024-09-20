@@ -160,7 +160,7 @@ function Signup() {
                             <button
                                 type="button"
                                 onClick={togglePasswordVisibility}
-                                className='absolute right-0 top-2 text-sm text-blue-500 hover:text-blue-700'
+                                className='absolute right-2 top-10 text-sm text-blue-500 hover:text-blue-700'
                             >
                                 {isPasswordVisible ? 'Hide' : 'Show'}
                             </button>
@@ -178,7 +178,7 @@ function Signup() {
                             <button
                                 type="button"
                                 onClick={toggleConfirmPasswordVisibility}
-                                className='absolute right-0 top-2 text-sm text-blue-500 hover:text-blue-700'
+                                className='absolute right-2 top-10 text-sm text-blue-500 hover:text-blue-700'
                             >
                                 {isConfirmPasswordVisible ? 'Hide' : 'Show'}
                             </button>

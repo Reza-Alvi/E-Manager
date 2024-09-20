@@ -15,6 +15,7 @@ const AddEmployee = () => {
     photo: '',
   });
 
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleChange = e => {
@@ -37,6 +38,7 @@ const AddEmployee = () => {
     }
   
     try {
+      setLoading(true);
       await axiosInstance.post('/api/employees', formData, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
@@ -46,17 +48,28 @@ const AddEmployee = () => {
       navigate('/');
     } catch (error) {
       console.error('Error uploading employee data:', error);
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <form onSubmit={handleSubmit} className="flex justify-center items-center h-screen">
-      <div className="bg-white p-4 rounded-lg shadow-md w-80">
+    <div className="relative flex justify-center items-center h-screen">
+      {loading && (
+        <div className="absolute inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center z-50">
+          <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-blue-500"></div>
+        </div>
+      )}
+      <form
+        onSubmit={handleSubmit}
+        className={`bg-white p-4 rounded-lg shadow-md w-80 ${loading ? 'filter blur-sm' : ''}`}
+      >
         <input
           type="file"
           name="photo"
           onChange={handleChange}
           className="w-full px-4 py-2 mb-4 border border-gray-300 rounded focus:outline-none"
+          disabled={loading}
         />
         <input
           type="text"
@@ -65,6 +78,7 @@ const AddEmployee = () => {
           value={employee.name}
           onChange={handleChange}
           className="w-full px-4 py-2 mb-4 border border-gray-300 rounded focus:outline-none"
+          disabled={loading}
         />
         <input
           type="number"
@@ -73,6 +87,7 @@ const AddEmployee = () => {
           value={employee.age}
           onChange={handleChange}
           className="w-full px-4 py-2 mb-4 border border-gray-300 rounded focus:outline-none"
+          disabled={loading}
         />
         <input
           type="text"
@@ -81,6 +96,7 @@ const AddEmployee = () => {
           value={employee.gender}
           onChange={handleChange}
           className="w-full px-4 py-2 mb-4 border border-gray-300 rounded focus:outline-none"
+          disabled={loading}
         />
         <input
           type="text"
@@ -89,6 +105,7 @@ const AddEmployee = () => {
           value={employee.nationality}
           onChange={handleChange}
           className="w-full px-4 py-2 mb-4 border border-gray-300 rounded focus:outline-none"
+          disabled={loading}
         />
         <input
           type="text"
@@ -97,6 +114,7 @@ const AddEmployee = () => {
           value={employee.address}
           onChange={handleChange}
           className="w-full px-4 py-2 mb-4 border border-gray-300 rounded focus:outline-none"
+          disabled={loading}
         />
         <input
           type="email"
@@ -105,6 +123,7 @@ const AddEmployee = () => {
           value={employee.contacts}
           onChange={handleChange}
           className="w-full px-4 py-2 mb-4 border border-gray-300 rounded focus:outline-none"
+          disabled={loading}
         />
         <input
           type="text"
@@ -113,6 +132,7 @@ const AddEmployee = () => {
           value={employee.category}
           onChange={handleChange}
           className="w-full px-4 py-2 mb-4 border border-gray-300 rounded focus:outline-none"
+          disabled={loading}
         />
         <input
           type="number"
@@ -121,15 +141,17 @@ const AddEmployee = () => {
           value={employee.salary}
           onChange={handleChange}
           className="w-full px-4 py-2 mb-4 border border-gray-300 rounded focus:outline-none"
+          disabled={loading}
         />
         <button
           type="submit"
           className="w-full bg-blue-500 text-white rounded py-2 px-4 text-sm hover:bg-blue-600"
+          disabled={loading}
         >
-          Add
+          {loading ? 'Adding...' : 'Add'}
         </button>
-      </div>
-    </form>
+      </form>
+    </div>
   );
 };
 

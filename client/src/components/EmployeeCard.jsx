@@ -3,18 +3,27 @@ import { useNavigate } from 'react-router-dom';
 import axiosInstance from '../utils/axiosInstance';
 import { FaEllipsisV } from 'react-icons/fa';
 import { useState } from 'react';
+import { FaSpinner } from 'react-icons/fa';
 
 const EmployeeCard = ({ employee }) => {
   const navigate = useNavigate();
   const [showMenu, setShowMenu] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleDelete = async () => {
-    await axiosInstance.delete(`/api/employees/${employee._id}`, {
-      headers: {
-          Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
-      }
-    });
-    window.location.reload();
+    setIsLoading(true);
+    try {
+      await axiosInstance.delete(`/api/employees/${employee._id}`, {
+        headers: {
+            Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+        }
+      });
+      window.location.reload();
+    } catch (error) {
+      console.error('Error deleting employee:', error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleEdit = () => {
@@ -50,7 +59,7 @@ const EmployeeCard = ({ employee }) => {
               className="w-full text-left px-4 py-2 text-sm text-red-500 hover:bg-gray-100"
               onClick={handleDelete}
             >
-              Delete
+              {isLoading ? <FaSpinner className="animate-spin" /> : 'Delete'}
             </button>
           </div>
         )}

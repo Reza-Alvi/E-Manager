@@ -43,7 +43,6 @@ axiosInstance.interceptors.response.use(
                     // Refresh token is expired
                     localStorage.removeItem('accessToken');
                     localStorage.removeItem('refreshToken');
-                    localStorage.removeItem('loggedInUser');
                     window.location.href = '/login'; // Redirect to login page
                 }
                 return Promise.reject(refreshError);
