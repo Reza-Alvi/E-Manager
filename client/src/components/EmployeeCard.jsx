@@ -18,7 +18,7 @@ const EmployeeCard = ({ employee }) => {
             Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
         }
       });
-      window.location.reload();
+      navigate('/');
     } catch (error) {
       console.error('Error deleting employee:', error);
     } finally {
