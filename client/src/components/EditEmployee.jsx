@@ -59,7 +59,7 @@ const EditEmployee = () => {
           'Content-Type': 'multipart/form-data',
         }
       });
-      navigate('/');
+      navigate('/home');
     } catch (error) {
       console.error('Error updating employee data:', error);
     } finally {

@@ -45,7 +45,7 @@ const AddEmployee = () => {
           'Content-Type': 'multipart/form-data',
         }
       });
-      navigate('/');
+      navigate('/home');
     } catch (error) {
       console.error('Error uploading employee data:', error);
     } finally {

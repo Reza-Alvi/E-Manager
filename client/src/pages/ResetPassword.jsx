@@ -8,6 +8,7 @@ const ResetPassword = () => {
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [message, setMessage] = useState('');
+    const [loading, setLoading] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     const [showModal, setShowModal] = useState(false);
@@ -18,6 +19,8 @@ const ResetPassword = () => {
             setMessage('Passwords do not match');
             return;
         }
+        
+        setLoading(true);
 
         try {
             const response = await axios.post(`https://e-manager-api.vercel.app/auth/reset-password/${token}`, { password });
@@ -25,6 +28,8 @@ const ResetPassword = () => {
             setShowModal(true);
         } catch (error) {
             setMessage(error.response.data.message);
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -86,8 +91,35 @@ const ResetPassword = () => {
                             {showConfirmPassword ? 'Hide' : 'Show'}
                         </button>
                     </div>
-                    <button type="submit" className='bg-red-500 text-white text-lg rounded p-2 cursor-pointer my-1'>
-                        Reset Password
+                    <button
+                        type="submit"
+                        className={`bg-red-500 text-white text-lg rounded p-2 cursor-pointer my-1 flex justify-center items-center`}
+                        disabled={loading}
+                    >
+                        {loading ? (
+                            <svg
+                                className="animate-spin h-5 w-5 text-white"
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                            >
+                                <circle
+                                    className="opacity-25"
+                                    cx="12"
+                                    cy="12"
+                                    r="10"
+                                    stroke="currentColor"
+                                    strokeWidth="4"
+                                ></circle>
+                                <path
+                                    className="opacity-75"
+                                    fill="currentColor"
+                                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
+                                ></path>
+                            </svg>
+                        ) : (
+                            'Reset Password'
+                        )}
                     </button>
                 </form>
                 {message && <p className='text-center text-gray-700 mt-3'>{message}</p>}
