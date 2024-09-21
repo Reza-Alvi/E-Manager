@@ -8,6 +8,7 @@ import { IconContext } from 'react-icons';
 import ProfileMenu from '../pages/ProfileMenu';
 import axiosInstance from '../utils/axiosInstance';
 import SearchDropdown from './SearchDropdown';
+import logo from '../assets/emanager.png'; 
 
 function Navbar({ onSearch }) {
   const [sidebar, setSidebar] = useState(false);
@@ -51,9 +52,15 @@ function Navbar({ onSearch }) {
     <>
       <IconContext.Provider value={{ color: 'red' }}>
         <div className="flex justify-between items-center w-full h-[50px] bg-[#060b26]">
-          <Link to="#" className="ml-2 text-2xl bg-none">
-            <FaIcons.FaBars onClick={showSidebar} />
-          </Link>
+          <div className="flex items-center">
+            <Link to="#" className="ml-2 text-2xl bg-none">
+              <FaIcons.FaBars onClick={showSidebar} />
+            </Link>
+            <img src={logo} alt="E-Manager Logo" className="h-full ml-2" style={{ height: '80px', width: 'auto' }} />
+          </div>
+          <div className="flex-grow text-center text-orange-500 font-bold text-xl">
+            <span className="font-extrabold text-2xl tracking-wide">E-Manager</span>
+          </div>
           <div className="flex items-center ml-auto">
             <div className="relative z-50">
               <FaSearch className="text-white cursor-pointer mx-2" onClick={handleSearchClick} />
