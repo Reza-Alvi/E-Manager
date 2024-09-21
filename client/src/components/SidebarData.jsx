@@ -12,7 +12,7 @@ export const SidebarData = [
   },
   {
     title: 'Graph',
-    path: '/graph',
+    path: '/graphs',
     icon: <AiIcons.AiFillPieChart />,
     cName: 'nav-text'
   },
