@@ -38,7 +38,7 @@ function App() {
         <Route path="/employee-details/:id" element={<EmployeeDetails />} /> 
         <Route path="/profile" element={<Profile />} />
         <Route path="/profile-details" element={<ProfileDetails />} />
-        <Route path="/graphs" element={<Graph />} />
+        <Route path="/graph" element={<Graph />} />
       </Routes>
     
     </div>
