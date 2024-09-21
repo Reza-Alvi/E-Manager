@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import * as FaIcons from 'react-icons/fa';
 import { FaUserCircle, FaSearch } from 'react-icons/fa';
 import * as AiIcons from 'react-icons/ai';
@@ -6,13 +6,30 @@ import { Link, useNavigate } from 'react-router-dom';
 import { SidebarData } from './SidebarData';
 import { IconContext } from 'react-icons';
 import ProfileMenu from '../pages/ProfileMenu';
+import axiosInstance from '../utils/axiosInstance';
 import SearchDropdown from './SearchDropdown';
 
 function Navbar({ onSearch }) {
   const [sidebar, setSidebar] = useState(false);
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
   const [isSearchMenuOpen, setIsSearchMenuOpen] = useState(false);
+  const [profilePic, setProfilePic] = useState(null);
+  const [userName, setUserName] = useState("");
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchProfileData = async () => {
+      try {
+        const response = await axiosInstance.get('/auth/profile');
+        const { firstName, lastName, profilePicture } = response.data;
+        setUserName(`${firstName} ${lastName}`);
+        setProfilePic(profilePicture);
+      } catch (error) {
+        console.log("Error fetching profile data", error);
+      }
+    };
+    fetchProfileData();
+  }, []);
 
   const showSidebar = () => setSidebar(!sidebar);
 
@@ -27,7 +44,6 @@ function Navbar({ onSearch }) {
   const handleSignOut = () => {
     localStorage.removeItem('accessToken');
     localStorage.removeItem('refreshToken');
-    localStorage.removeItem('loggedInUser');
     navigate('/login');
   };
 
@@ -38,9 +54,6 @@ function Navbar({ onSearch }) {
           <Link to="#" className="ml-2 text-2xl bg-none">
             <FaIcons.FaBars onClick={showSidebar} />
           </Link>
-          <div className="flex-grow text-center text-orange-500 font-bold text-xl">
-            <span className="font-extrabold text-2xl tracking-wide">E-Manager</span>
-          </div>
           <div className="flex items-center ml-auto">
             <div className="relative z-50">
               <FaSearch className="text-white cursor-pointer mx-2" onClick={handleSearchClick} />
@@ -51,7 +64,18 @@ function Navbar({ onSearch }) {
               )}
             </div>
             <div className="relative z-50">
-              <FaUserCircle className="text-white cursor-pointer mx-2" onClick={handleProfileClick} />
+              {profilePic ? (
+                <img
+                  src={profilePic}
+                  alt="Profile"
+                  className="text-white cursor-pointer mx-2"
+                  style={{ width: '40px', height: '40px', borderRadius: '50%' }}
+                  onClick={handleProfileClick}
+                />
+              ) : (
+                <FaIcons.FaUserCircle className="text-white cursor-pointer mx-2" onClick={handleProfileClick} />
+              )}
+
               {isProfileMenuOpen && (
                 <div className="absolute right-0 mt-2 w-48 bg-white border rounded shadow-lg">
                   <div
