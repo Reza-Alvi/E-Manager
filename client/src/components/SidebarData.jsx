@@ -11,7 +11,7 @@ export const SidebarData = [
   },
   {
     title: 'Graph',
-    path: '/graphs',
+    path: '/graph',
     icon: <AiIcons.AiFillPieChart />,
     cName: 'nav-text'
   },
