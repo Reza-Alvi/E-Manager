@@ -56,8 +56,6 @@ const Support = () => {
           <ul className="list-none">
             <li className="mb-2"><a href="/terms" className="text-orange-500 hover:underline">Terms of Service</a></li>
             <li className="mb-2"><a href="/privacy" className="text-orange-500 hover:underline">Privacy Policy</a></li>
-            <li className="mb-2"><a href="/faq" className="text-orange-500 hover:underline">FAQ</a></li>
-            <li className="mb-2"><a href="/contact" className="text-orange-500 hover:underline">Contact Support</a></li>
           </ul>
         </footer>
       </div>
