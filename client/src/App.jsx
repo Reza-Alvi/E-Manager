@@ -13,6 +13,7 @@ import ProfileDetails from './pages/ProfileDetails.jsx';
 import ForgotPassword from './pages/ForgotPassword.jsx';
 import ResetPassword from './pages/ResetPassword.jsx';
 import Graph from './pages/Graph';
+import Support from './pages/Support';
 import './Ap.css';
 
 function App() {
@@ -39,6 +40,7 @@ function App() {
         <Route path="/profile" element={<Profile />} />
         <Route path="/profile-details" element={<ProfileDetails />} />
         <Route path="/graphs" element={<Graph />} />
+        <Route path="/support" element={<Support />} />
       </Routes>
     
     </div>
